@@ -1,0 +1,94 @@
+{
+  "name": "Merlot",
+  "build": {
+    "context": "..",
+    "dockerfile": "Dockerfile"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "configureZshAsDefaultShell": true
+    },
+    "ghcr.io/devcontainers/features/terraform:1": {
+      "version": "1.1.4",
+      "tflint": "none",
+      "terragrunt": "none"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "dockerDashComposeVersion": "v2"
+    },
+    "ghcr.io/devcontainers/features/kubectl-helm-minikube:1": {
+      "version": "1.23.16",
+      "helm": "3.12.1",
+      "minikube": "none"
+    },
+    "ghcr.io/dhoeric/features/k9s:1": {
+      "version": "0.27.4"
+    },
+    "ghcr.io/dhoeric/features/act:1": {
+      "version": "0.2.46"
+    },
+    "ghcr.io/devcontainers-contrib/features/actionlint:1": {
+      "version": "1.6.24"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    },
+    "ghcr.io/devcontainers/features/go:1": {
+      "version": "1.20"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.10"
+    },
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "none",
+      "installMaven": "true",
+      "mavenVersion": "3.8.6",
+      "installGradle": "true"
+    },
+    "ghcr.io/dbildungsplattform/infra-dcfeatures/hostctl:1": {
+      "version": "1.1.4"
+    },
+    "ghcr.io/dbildungsplattform/infra-dcfeatures/ionosctl:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.makefile-tools",
+        "Tim-Koehler.helm-intellisense",
+        "esbenp.prettier-vscode",
+        "christian-kohler.path-intellisense",
+        "redhat.vscode-yaml",
+        "ms-python.python",
+        "donjayamanne.python-environment-manager",
+        "timonwong.shellcheck",
+        "golang.Go",
+        "dbaeumer.vscode-eslint",
+        "mhutchie.git-graph"
+      ],
+      "settings": {
+        "terraform.languageServer.enable": true,
+        "terraform.languageServer.args": ["serve"]
+      }
+    }
+  },
+  "remoteEnv": {
+    "TF_LOG": "info",
+    "IONOS_USERNAME": "${localEnv:MERLOT_IONOS_USERNAME}",
+    "IONOS_PASSWORD": "${localEnv:MERLOT_IONOS_PASSWORD}",
+    "HOSTNAME": "${localEnv:HOSTNAME}-DC"
+  },
+  "workspaceMount": "source=${localEnv:MERLOT_WORKSPACE},target=/workspace,type=bind",
+  "workspaceFolder": "/workspace",
+  "mounts": [
+    "source=${localEnv:HOME}/.kube,target=/home/vscode/.kube,type=bind",
+    "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind",
+    "source=${localEnv:HOME},target=/localhome,type=bind",
+    "source=${localEnv:MERLOT_WORKSPACE}/.history,target=/home/vscode/.history,type=bind",
+    "source=${localEnv:MERLOT_WORKSPACE}/.ansible,target=/home/vscode/.ansible,type=bind",
+    "source=${localEnv:MERLOT_WORKSPACE}/.config,target=/home/vscode/.config,type=bind",
+    "source=${localEnv:MERLOT_WORKSPACE}/.local,target=/home/vscode/.local,type=bind"
+  ],
+  "postCreateCommand": "helm plugin list | grep -q diff; [ $? != 0 ] && helm plugin install https://github.com/databus23/helm-diff",
+  "postStartCommand": "sudo bash -c \"hostname $HOSTNAME; echo $(hostname -I | cut -d' ' -f2) $HOSTNAME >> /etc/hosts\""
+}
