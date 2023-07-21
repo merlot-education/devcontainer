@@ -27,7 +27,7 @@ The following variables are used to access various accounts at our infrastructur
 - MERLOT_WORKSPACE points to a directory where all modifications made inside the devcontainer are persisted. Repository checkouts inside the devcontainer should be stored here. See also the use of mounted directories below.
   **Please regard that the path of this environment variable must be absolute.**
   <br>
-- HOSTNAME environment variable must be set with the hostname of the host, otherwise the devcontainer host cannot be set, eg. <code>export HOSTNAME=`hostname`</code>
+- HOSTNAME environment variable must be set with the hostname of the host, otherwise the devcontainer host cannot be set, eg. <code>export HOSTNAME=\`hostname\`</code>
 
 #### Directories
 
